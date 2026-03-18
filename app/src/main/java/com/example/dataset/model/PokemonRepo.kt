@@ -11,7 +11,7 @@ class PokemonRepository {
     suspend fun getByType(type: String) = api.getPokemonByType(execUrl, apiKey, type = type)
     suspend fun getByName(name: String) = api.getPokemonByName(execUrl, apiKey, name = name)
 
-    suspend fun addPokemon(pokemon: Map<String, Any>): ApiResponse<Nothing> {
+    suspend fun addPokemon(pokemon: Map<String, @JvmSuppressWildcards Any>): ApiResponse<Nothing> {
         val body = pokemon.toMutableMap()
         body["apiKey"] = apiKey
         body["action"] = "addPokemon"

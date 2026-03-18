@@ -18,7 +18,7 @@ class MainViewModel : ViewModel() {
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> = _error
 
-    // LiveData de resultado para operaciones POST (addPokemon, addFavorite)
+    // LiveData de resultado para operaciones POST
     private val _result = MutableLiveData<ApiResponse<Nothing>?>()
     val result: LiveData<ApiResponse<Nothing>?> = _result
 
@@ -38,18 +38,6 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun filterByType(type: String) {
-        viewModelScope.launch {
-            try {
-                _error.postValue(null)
-                val response = repository.getByType(type)
-                _pokemonList.postValue(response.data ?: emptyList())
-            } catch (e: Exception) {
-                _error.postValue(e.message)
-            }
-        }
-    }
-
     fun searchByName(name: String) {
         viewModelScope.launch {
             try {
@@ -62,11 +50,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun selectPokemon(num: Int) {
-        _selectedPokemon.value = _pokemonList.value?.find { it.Num == num }
-    }
-
-    fun addPokemon(pokemon: Map<String, Any>) {
+    fun addPokemon(pokemon: Map<String, @JvmSuppressWildcards Any>) {
         viewModelScope.launch {
             try {
                 _error.postValue(null)
@@ -77,20 +61,13 @@ class MainViewModel : ViewModel() {
             }
         }
     }
-
-    fun addFavorite(name: String, type1: String, num: Int) {
-        viewModelScope.launch {
-            try {
-                _error.postValue(null)
-                val response = repository.addFavorite(name, type1, num)
-                _result.postValue(response)
-            } catch (e: Exception) {
-                _error.postValue(e.message)
-            }
-        }
-    }
-
     fun clearResult() {
         _result.value = null
+    }
+
+    fun isDuplicate(name: String, num: Int): Boolean {
+        return _pokemonList.value?.any { pokemon ->
+            pokemon.Name.equals(name.trim(), ignoreCase = true) || pokemon.Num == num
+        } ?: false
     }
 }

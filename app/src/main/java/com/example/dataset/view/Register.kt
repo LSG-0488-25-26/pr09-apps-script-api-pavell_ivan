@@ -34,19 +34,19 @@ import com.example.dataset.model.SharedPrefsManager
 @Composable
 fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
-    onBack:            () -> Unit
+    onBack: () -> Unit
 ) {
     val context = LocalContext.current
 
-    var username  by remember { mutableStateOf("") }
-    var password  by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     var password2 by remember { mutableStateOf("") }
-    var error     by remember { mutableStateOf("") }
+    var error by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title          = { Text("Crear compte") },
+                title = { Text("Crear compte") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Tornar")

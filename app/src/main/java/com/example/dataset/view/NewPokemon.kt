@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -16,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -57,6 +55,7 @@ fun AddPokemonScreen(
 
     var nameError  by remember { mutableStateOf(false) }
     var type1Error by remember { mutableStateOf(false) }
+    var duplicateError by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(result) {
         if (result?.status == "ok") {
@@ -85,8 +84,6 @@ fun AddPokemonScreen(
                 .padding(horizontal = 20.dp, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-
-            // ── Num automàtic ──────────────────────────────────────────
             Row(
                 verticalAlignment     = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -106,7 +103,7 @@ fun AddPokemonScreen(
 
             HorizontalDivider()
 
-            // ── Nom ────────────────────────────────────────────────────
+            // ── Nom
             SectionTitle("Informació bàsica")
 
             OutlinedTextField(
@@ -118,14 +115,14 @@ fun AddPokemonScreen(
                 modifier       = Modifier.fillMaxWidth()
             )
 
-            // ── Tipus ──────────────────────────────────────────────────
+            // ── Tipus
             SectionTitle("Tipus")
 
             Row(
                 modifier              = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Tipus 1 — obligatori, sense NONE
+                // Tipus 1
                 TypeDropdown(
                     label       = "Tipus 1 *",
                     selected    = type1,
@@ -135,7 +132,7 @@ fun AddPokemonScreen(
                     onSelect    = { type1 = it; type1Error = false },
                     modifier    = Modifier.weight(1f)
                 )
-                // Tipus 2 — opcional, NONE = cap tipus
+                // Tipus 2
                 TypeDropdown(
                     label       = "Tipus 2",
                     selected    = type2,
@@ -156,7 +153,7 @@ fun AddPokemonScreen(
 
             HorizontalDivider()
 
-            // ── Estadístiques (1–255) ──────────────────────────────────
+            // ── Estadístiques (1–255)
             SectionTitle("Estadístiques  (1 – 255)")
 
             StatSlider("HP",      hp,      { hp = it })
@@ -168,7 +165,7 @@ fun AddPokemonScreen(
 
             HorizontalDivider()
 
-            // ── Llegendari ─────────────────────────────────────────────
+            // ── Llegendari
             SectionTitle("Atributs especials")
 
             Row(
@@ -196,25 +193,50 @@ fun AddPokemonScreen(
                 }
                 Switch(checked = legendary, onCheckedChange = { legendary = it })
             }
-
-            // ── Error de xarxa ─────────────────────────────────────────
-            error?.let {
-                Text("Error: $it", color = MaterialTheme.colorScheme.error, fontSize = 13.sp)
+            duplicateError?.let {
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.errorContainer
+                    ),
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier.padding(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text     = it,
+                            color    = MaterialTheme.colorScheme.onErrorContainer,
+                            fontSize = 13.sp
+                        )
+                    }
+                }
             }
-
-            // ── Botó guardar ───────────────────────────────────────────
             Button(
                 onClick = {
                     nameError  = name.isBlank()
                     type1Error = type1 == null
                     if (nameError || type1Error) return@Button
 
+                    // Comprobación de duplicado
+                    val nameDup = pokemons.any { it.Name.equals(name.trim(), ignoreCase = true) }
+                    val numDup  = pokemons.any { it.Num == nextNum }
+
+                    duplicateError = when {
+                        nameDup && numDup -> "Ja existeix un Pokémon amb aquest nom i número"
+                        nameDup           -> "Ja existeix un Pokémon amb el nom \"${name.trim()}\""
+                        numDup            -> "Ja existeix un Pokémon amb el número #$nextNum"
+                        else              -> null
+                    }
+                    if (duplicateError != null) return@Button
+
                     viewModel.addPokemon(
                         mapOf(
                             "Num"        to nextNum,
                             "Name"       to name.trim(),
                             "Type1"      to (type1!!.displayName),
-                            // Si type2 és NONE enviem string buit (la sheet accepta cel·la buida)
                             "Type2"      to if (type2 == PokemonType.NONE) "" else type2.displayName,
                             "HP"         to hp.toInt(),
                             "Attack"     to attack.toInt(),

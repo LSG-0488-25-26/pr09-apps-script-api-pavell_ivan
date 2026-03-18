@@ -19,7 +19,7 @@ import com.example.dataset.model.Pokemon
 @Composable
 fun PokemonCard(
     pokemon: Pokemon,
-    onClick: () -> Unit = {}          // ← paràmetre que faltava
+    onClick: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier

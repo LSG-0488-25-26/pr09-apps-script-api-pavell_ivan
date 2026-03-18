@@ -29,13 +29,13 @@ import com.example.dataset.model.PokemonType
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TypeDropdown(
-    label:       String,
-    selected:    PokemonType?,      // null només per type1 quan encara no s'ha triat res
-    options:     List<PokemonType>,
-    isError:     Boolean,
+    label: String,
+    selected: PokemonType?,
+    options: List<PokemonType>,
+    isError: Boolean,
     placeholder: String,
-    onSelect:    (PokemonType) -> Unit,
-    modifier:    Modifier = Modifier
+    onSelect: (PokemonType) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
 

@@ -64,15 +64,6 @@ fun PokemonDetailScreen(
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Tornar")
                     }
-                },
-                actions = {
-                    if (pokemon != null) {
-                        IconButton(onClick = {
-                            viewModel.addFavorite(pokemon.Name, pokemon.Type1, pokemon.Num)
-                        }) {
-                            Icon(Icons.Default.Favorite, contentDescription = "Afegir a favorits")
-                        }
-                    }
                 }
             )
         }
