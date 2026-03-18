@@ -18,7 +18,6 @@ fun AppNavHost(viewModel: MainViewModel = viewModel()) {
     val navController = rememberNavController()
     val context       = LocalContext.current
 
-    // Determina la pantalla inicial según si ya hay sesión
     val start = if (SharedPrefsManager.isLoggedIn(context))
         Routes.List.route else Routes.Login.route
 

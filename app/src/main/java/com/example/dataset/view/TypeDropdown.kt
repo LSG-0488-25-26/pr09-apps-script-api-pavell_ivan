@@ -88,7 +88,6 @@ fun TypeDropdown(
     }
 }
 
-// Extensió sobre l'enum per obtenir el color associat al tipus
 private fun PokemonType.toColor(): Color = when (this) {
     PokemonType.FIRE     -> Color(0xFFFF9741)
     PokemonType.WATER    -> Color(0xFF3692DC)

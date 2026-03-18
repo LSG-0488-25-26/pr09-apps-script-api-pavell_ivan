@@ -52,7 +52,6 @@ fun PokemonListScreen(
                 title   = { Text("Pokédex") },
                 actions = {
                     IconButton(onClick = onLogout) {
-                        // Icona correcta: AutoMirrored per evitar el deprecat
                         Icon(
                             Icons.AutoMirrored.Filled.ExitToApp,
                             contentDescription = "Logout"
@@ -72,7 +71,6 @@ fun PokemonListScreen(
                 .fillMaxSize()
                 .padding(padding)
         ) {
-            // Barra de cerca
             OutlinedTextField(
                 value         = searchQuery,
                 onValueChange = {

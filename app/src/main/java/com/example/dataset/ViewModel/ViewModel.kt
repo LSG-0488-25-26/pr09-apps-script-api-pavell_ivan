@@ -18,11 +18,9 @@ class MainViewModel : ViewModel() {
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> = _error
 
-    // LiveData de resultado para operaciones POST
     private val _result = MutableLiveData<ApiResponse<Nothing>?>()
     val result: LiveData<ApiResponse<Nothing>?> = _result
 
-    // Pokémon seleccionado para la pantalla de detalle
     private val _selectedPokemon = MutableLiveData<Pokemon?>()
     val selectedPokemon: LiveData<Pokemon?> = _selectedPokemon
 

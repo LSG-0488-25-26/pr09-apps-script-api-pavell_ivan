@@ -21,10 +21,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dataset.ViewModel.MainViewModel
 import com.example.dataset.model.PokemonType
 
-// Tipus disponibles per al Tipus 1 (sense NONE)
 private val TYPE1_OPTIONS = PokemonType.entries.filter { it != PokemonType.NONE }
 
-// Tipus disponibles per al Tipus 2 (NONE primer, com a "cap tipus")
 private val TYPE2_OPTIONS = listOf(PokemonType.NONE) + TYPE1_OPTIONS
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,7 +35,6 @@ fun AddPokemonScreen(
     val pokemons by viewModel.pokemonList.observeAsState(emptyList())
     val error    by viewModel.error.observeAsState()
 
-    // Num automàtic: màxim actual + 1
     val nextNum = remember(pokemons) {
         (pokemons.maxOfOrNull { it.Num } ?: 0) + 1
     }
@@ -153,7 +150,7 @@ fun AddPokemonScreen(
 
             HorizontalDivider()
 
-            // ── Estadístiques (1–255)
+            // ── Estadístiques
             SectionTitle("Estadístiques  (1 – 255)")
 
             StatSlider("HP",      hp,      { hp = it })
@@ -220,7 +217,6 @@ fun AddPokemonScreen(
                     type1Error = type1 == null
                     if (nameError || type1Error) return@Button
 
-                    // Comprobación de duplicado
                     val nameDup = pokemons.any { it.Name.equals(name.trim(), ignoreCase = true) }
                     val numDup  = pokemons.any { it.Num == nextNum }
 

@@ -16,7 +16,6 @@ object SharedPrefsManager {
         }
     }
 
-    /** Retorna el parell (username, password) si existeix, o null */
     fun getCredentials(context: Context): Pair<String, String>? {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
         val user  = prefs.getString(KEY_USER, null)
@@ -36,7 +35,6 @@ object SharedPrefsManager {
     fun logout(context: Context) {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit()
             .putBoolean(KEY_LOGGED, false).apply()
-        // Nota: no borrem les credencials per permetre re-login sense re-registre
     }
 
     fun getUsername(context: Context): String? =
