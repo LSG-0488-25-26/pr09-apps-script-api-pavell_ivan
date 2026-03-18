@@ -27,7 +27,7 @@ import com.example.dataset.model.SharedPrefsManager
 @Composable
 fun Login(
     onLoginSuccess: () -> Unit,
-    onGoRegister:   () -> Unit          // ← nuevo: navega al registro
+    onGoRegister:   () -> Unit
 ) {
     val context = LocalContext.current
 

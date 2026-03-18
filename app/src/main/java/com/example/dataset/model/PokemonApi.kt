@@ -34,12 +34,12 @@ interface PokemonApiService {
     @POST
     suspend fun addPokemon(
         @Url url: String,
-        @Body body: Map<String, Any>
+        @Body body: Map<String, @JvmSuppressWildcards Any>
     ): ApiResponse<Nothing>
 
     @POST
     suspend fun addFavorite(
         @Url url: String,
-        @Body body: Map<String, Any>
+        @Body body: Map<String, @JvmSuppressWildcards Any>
     ): ApiResponse<Nothing>
 }
